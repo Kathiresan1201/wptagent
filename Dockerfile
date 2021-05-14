@@ -25,6 +25,12 @@ RUN apt-get update && \
     bind9utils \
     libnss3-tools \
     iproute2 \
+    traceroute \
+    firefox-geckodriver \
+    dirmngr \
+    apt-transport-https \
+    lsb-release \
+    ca-certificates \
     software-properties-common && \
 # Node setup
   curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash - && \
