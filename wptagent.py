@@ -866,10 +866,11 @@ def find_browsers(options):
             logging.debug('%s', browser)
     if not options.webdriver and 'Firefox' in browsers:
         try:
+            pass
             # make sure marionette is up to date
-            from internal.os_util import run_elevated
-            run_elevated(sys.executable, '-m pip install --upgrade marionette_driver')
-            run_elevated(sys.executable, '-m pip install \'mozrunner==7.4.0\' --force-reinstall')
+            #from internal.os_util import run_elevated
+            #run_elevated(sys.executable, '-m pip install --upgrade marionette_driver')
+            #run_elevated(sys.executable, '-m pip install \'mozrunner==7.4.0\' --force-reinstall')
         except Exception:
             pass
 
@@ -879,18 +880,19 @@ def find_browsers(options):
 def upgrade_pip_modules():
     """Upgrade all of the outdated pip modules"""
     try:
-        from internal.os_util import run_elevated
-        subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
-        run_elevated(sys.executable, '-m pip install --upgrade pip')
-        if (sys.version_info >= (3, 0)):
-            out = subprocess.check_output([sys.executable, '-m', 'pip', 'list', '--outdated', '--format', 'freeze'], encoding='UTF-8')
-        else:
-            out = subprocess.check_output([sys.executable, '-m', 'pip', 'list', '--outdated', '--format', 'freeze'])
-        for line in out.splitlines():
-            separator = line.find('==')
-            if separator > 0:
-                package = line[:separator]
-                run_elevated(sys.executable, '-m pip install --upgrade {0}'.format(package))
+      print("upgrade pip modules moved to Dockerfile")
+       # from internal.os_util import run_elevated
+       # subprocess.call([sys.executable, '-m', 'pip', 'install', '--upgrade', 'pip'])
+       # run_elevated(sys.executable, '-m pip install --upgrade pip')
+       # if (sys.version_info >= (3, 0)):
+       #     out = subprocess.check_output([sys.executable, '-m', 'pip', 'list', '--outdated', '--format', 'freeze'], encoding='UTF-8')
+       # else:
+       #     out = subprocess.check_output([sys.executable, '-m', 'pip', 'list', '--outdated', '--format', 'freeze'])
+       # for line in out.splitlines():
+       #     separator = line.find('==')
+       #     if separator > 0:
+       #         package = line[:separator]
+       #         run_elevated(sys.executable, '-m pip install --upgrade {0}'.format(package))
     except Exception:
         pass
 
