@@ -198,9 +198,6 @@ class WPTAgent(object):
             if self.adb is not None and self.adb.needs_exit:
                 break
         self.cleanup()
-        if self.needs_shutdown:
-            if platform.system() == "Linux":
-                subprocess.call(['sudo', 'poweroff'])
 
     def run_single_test(self):
         """Run a single test run"""
@@ -406,19 +403,7 @@ class WPTAgent(object):
             print("Missing mogrify utility. Please install ImageMagick and make sure it is in the path.")
             ret = False
 
-        if platform.system() == "Linux":
-            try:
-                subprocess.check_output(['traceroute', '--version'])
-            except Exception:
-                logging.debug("Traceroute is missing, installing...")
-                subprocess.call(['sudo', 'apt', '-yq', 'install', 'traceroute'])
-
-        if not self.options.android and not self.options.iOS and self.options.webdriver and 'Firefox' in detected_browsers:
-            try:
-                subprocess.check_output(['geckodriver', '-V'])
-            except Exception:
-                logging.debug("geckodriver is missing, installing...")
-                subprocess.call(['sudo', 'apt', '-yq', 'install', 'firefox-geckodriver'])
+   
 
         # If we are on Linux and there is no display, enable xvfb by default
         if platform.system() == "Linux" and not self.options.android and \
@@ -461,17 +446,6 @@ class WPTAgent(object):
                 run_elevated('chown', '-R {0}:{0} ~/.config'.format(getpass.getuser()))
             except Exception:
                 pass
-
-        # Check for Node 12+
-        if self.get_node_version() < 12.0:
-            if platform.system() == "Linux":
-                # This only works on debian-based systems
-                logging.debug('Updating Node.js to 12.x')
-                subprocess.call('sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates', shell=True)
-                subprocess.call('curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -', shell=True)
-                subprocess.call(['sudo', 'apt-get', 'install', '-y', 'nodejs'])
-            if self.get_node_version() < 12.0:
-                logging.warning("Node.js 12 or newer is required for Lighthouse testing")
 
         # Check the iOS install
         if self.ios is not None:
